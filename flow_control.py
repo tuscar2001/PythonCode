@@ -62,16 +62,128 @@ if __name__ == '__main__':
 
 
 
-def ensure_has_divisible(items, divisor):
-    for item in items:
-        if item % divisor == 0:
-            return item
-    items.append(divisor)
-    return divisor
+def go_north(position):
+    i, j = position
+    new_position = (i, j + 1)
+    return new_position
+
+def go_south(position):
+    i, j = position
+    new_position = (i, j - 1)
+    return new_position
 
 
-items = [2, 4, 36, 25, 9]
-divisor = 5
+def go_east(position):
+    i, j = position
+    new_position = (i + 1, j)
+    return new_position
 
-dividend = ensure_has_divisible(items, divisor)
-print ("{items} contains {dividend} which is a multiple of {divisor}".format(**locals()))
+def go_west(position):
+    i, j = (position)
+    new_position = (i - 1, j)
+    return new_position
+
+def look(position):
+    return position
+
+def quit(position):
+    return None
+
+def labyrinth(position, alive):
+    print ("You are in a maze of twisty passages, all alike.")
+    return position, alive
+
+def dark_forest_road(position, alive):
+    print ("You are on a roaf in a dark forest. To the north you can see a tower")
+    return position, alive
+
+def tall_tower(position, alive):
+    print ("There is a tall tower here, with no obvious door. A path leads East")
+    return position, alive
+
+def rabbit_hole(position, alive):
+    print ("You fall down a rabbit hole into a labyrinth")
+    return (0, 0), alive
+
+def lava_pit(position, alive):
+    print ("You fall into a lava pit")
+    return position, False
+
+
+def play():
+
+    position = (0, 0)
+    alive = True
+
+    while position:
+
+        # if position == (0, 0):
+        #     print ("You are in a maze of twisty passages, all alike")
+        # elif position == (1, 0):
+        #     print ("You are on a roaf in a dark forest. To the north you can see a tower")
+        # elif position == (1, 1):
+        #     print ("There is a tall tower here, with no obvious door. A path leads East")
+        # else:
+        #     print ("There is nothing here.")
+        # the if else above can be converted into lambda functions as below:
+
+        locations = {
+            (0, 0): labyrinth,
+            (1, 0): dark_forest_road,
+            (1, 1): tall_tower,
+            (2, 1): rabbit_hole,
+            (1, 2): lava_pit,
+        }
+
+        try:
+            location_action = locations[position]
+        except KeyError:
+            print ("There is nothing here.")
+        else:
+            position, alive = location_action(position, alive)
+
+        if not alive:
+            print ("Sorry, You're done")
+            break
+
+        command = input()
+
+        # i, j = position
+        # if command == "N":
+        #     position = (i, j + 1)
+        # elif command == "E":
+        #     position = (i + 1, j)
+        # elif command == "S":
+        #     position == (i, j - 1)
+        # elif command == "W":
+        #     position = (i - 1, j)
+        # elif command == "L":
+        #     pass
+        # elif command == "Q":
+        #     position = None
+        # else:
+        #     print ("I don't understand")
+
+       # the if else above can be converted into lambda functions as below:
+        actions = {
+            'N': go_north,
+            'E': go_east,
+            'S': go_south,
+            'L': go_west,
+            'L': look,
+            'Q': quit,
+        }
+
+        try:
+            command_action = actions[command]
+        except keyError:
+            print ("I don't understand")
+        else:
+            position = command_action(position)
+    else:
+        print ("You have chosen to leave the game")
+
+    print ("Game Over")
+
+if __name__ == '__main__':
+    play()
