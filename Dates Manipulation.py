@@ -15,3 +15,6 @@ print (df)
          DOB        DOB1
 0 2016-01-26  01/26/2016
 1 2016-01-26  01/26/2016
+
+#Changing date type
+test['dateChanged'] = test['date'].astype('datetime64[ns]')
